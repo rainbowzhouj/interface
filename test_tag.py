@@ -10,6 +10,20 @@ class TestTag:
     def setup_class(self):
         self.tag = Tag()
 
+    # @pytest.mark.parametrize("group,tags",[
+    #     ['UI','selenium'],
+    #     ['app','appnium'],
+    # ])
+
+    def test_tag_add(self):
+        r = self.tag.add(
+            # group=group,
+            # tags=tags   ,group,tags
+        )
+
+        r = self.tag.list()
+        assert jsonpath(r.json(), f"$..[?(@.name=='app')]")[0]['name'] is not None
+
     @pytest.mark.parametrize("tag_id, tag_name", [
         ['etXTmQCgAAEes0z0UDZBh_kBwovxScQQ', 'tag1_new_'],
         ['etXTmQCgAAEes0z0UDZBh_kBwovxScQQ', 'tag1——中文'],

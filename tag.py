@@ -18,7 +18,22 @@ class Tag:
         return token
 
     def add(self):
-        pass
+        r = requests.post(
+            'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/add_corp_tag',
+            params={"access_token": self.token},
+            json={
+                "group_name": 'app',
+                "order": 6,
+                "tag": [
+                    {
+                        "name": 'Appnium',
+                        "order": 1
+                    }
+                ]
+            }
+        )
+        print(json.dumps(r.json(), indent=2))
+        return r
 
     def list(self):
         url = 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get_corp_tag_list'
@@ -39,4 +54,19 @@ class Tag:
         return r
 
     def delete(self):
-        pass
+        r = requests.post(
+            'hhttps://qyapi.weixin.qq.com/cgi-bin/externalcontact/del_corp_tag',
+            params={"access_token": self.token},
+            json={
+                "group_name": 'app',
+                "order": 6,
+                "tag": [
+                    {
+                        "name": 'Appnium',
+                        "order": 1
+                    }
+                ]
+            }
+        )
+        print(json.dumps(r.json(), indent=2))
+        return r
