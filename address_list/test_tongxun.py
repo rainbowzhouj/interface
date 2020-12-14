@@ -1,20 +1,12 @@
 import datetime
+import json
 import random
 
 import pytest
 import requests
 from jsonpath import jsonpath
 
-from address_list.tongxun import Tongxun
-
-
-class PhoneNOGenerator():
-    # 随机生成手机号码
-
-    def phoneNORandomGenerator(self):
-        prelist = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150", "151", "152",
-                   "153", "155", "156", "157", "158", "159", "186", "187", "188"]
-        return random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
+from address_list.tongxun import Tongxun, PhoneNOGenerator
 
 
 class TestTongxun:
@@ -26,26 +18,32 @@ class TestTongxun:
         # 名字为中文时，存在转义问题
         name = "Zz"
         pg = PhoneNOGenerator()
-        mobilephone = pg.phoneNORandomGenerator()
+        mobile = pg.phoneNORandomGenerator()
         department = "1"
-        r = self.user.add(userid=userid, name=name, mobilephone=mobilephone, department=department)
+        r = self.user.add(userid=userid, name=name, mobile=mobile, department=department)
         assert r.status_code == 200
         assert r.json()["errcode"] == 0
 
+    def test_add_and_delete(self):
+        name = "lN"
+        userid = "liumengqing"
+        pg = PhoneNOGenerator()
+        mobile = pg.phoneNORandomGenerator()
+        self.user.add_and_delete(name=name, userid=userid, mobile=mobile, department=[]
+                                 )
 
-
-    @pytest.mark.parametrize("userid, user_name",[
+    @pytest.mark.parametrize("userid, user_name", [
         ['liumengqing', 'Zreturn_'],
         ['liumengqing', 'UIAutomartor'],
         ['liumengqing', 'mitmproxy[中文]'],
     ])
-    def test_update_user(self,userid, user_name):
+    def test_update_user(self, userid, user_name):
         user_name = user_name + str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
         r = self.user.update(userid=userid, user_name=user_name)
         r = self.user.list(userid=userid)
         assert r.status_code == 200
         assert r.json()["errcode"] == 0
-        a=jsonpath(r.json(), f"$..name")
+        a = jsonpath(r.json(), f"$..name")
         print(a)
         assert "".join(a) == user_name
 
@@ -68,4 +66,7 @@ class TestTongxun:
 
     def test_delete_and_detect_user(self):
         r = self.user.delete_and_detect_user(["hechenxin"])
-        assert r.json()["errcode"] == 0
+        print(json.dumps(r.json(), indent=2))
+
+    def test_department(self):
+        self.user.get_partyid()

@@ -1,32 +1,81 @@
+import random
+import re
+
 from address_list.base_api import BaseApi
 
+
+class PhoneNOGenerator():
+    # 随机生成手机号码
+
+    def phoneNORandomGenerator(self):
+        prelist = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150", "151", "152",
+                   "153", "155", "156", "157", "158", "159", "186", "187", "188"]
+        return random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
 
 class Tongxun(BaseApi):
     def __init__(self):
         super().__init__()
 
-    def add(self, userid, name, mobilephone, department, **kwargs):
+    def add(self, userid, name, mobile, department, **kwargs):
         data = {
             "method": "post",
             "url": "https://qyapi.weixin.qq.com/cgi-bin/user/create",
             "params": {"access_token": self.token},
             "json": {"userid": userid,
                      "name": name,
-                     "mobile": mobilephone,
+                     "mobile": mobile,
                      "department": department,
                      **kwargs
                      }}
         return self.send(data)
 
+    def add_and_delete(self, userid, name, mobile, department, **kwargs):
+        r = self.add(userid, name, mobile, department, **kwargs)
+        errcode = r.json()['errcode']
+        # userid出现相同的时候
+        if errcode == 60102:
+            user_id = self.list(userid).json()['userid']
+            if not user_id:
+                return ""
+            self.delete(userid)
+            self.add(userid, name, mobile, department, **kwargs)
+            result = self.list(userid).json()['userid']
+            if not result:
+                print("add not success")
+            return result
+        # 当出现手机号相同情况
+        elif errcode == 60104:
+            # 根据错误信息返回拿到user_id
+            msg = r.json()['errmsg']
+            user = re.findall("([^:]+)$", msg)[0]
+            # 判断是否存在手机号
+            mobile = self.list(user).json()['mobile']
+            if not mobile:
+                return ""
+            self.delete(user)
+            self.add(userid, name, mobile, department, **kwargs)
+            result = self.list(userid).json()['userid']
+            if not result:
+                print("add not success")
+            return result
+        # 手机号和邮箱为空的情况
+        elif errcode == 60129:
+            pg = PhoneNOGenerator()
+            mobile = pg.phoneNORandomGenerator()
+            email = mobile + "@139.com"
+            self.add(userid, name, email=email, **kwargs)
+        # 当部门为空或者不存在时候
+        elif errcode == 40066:
+            print("不合法的部门列表")
 
-    def list(self,userid):
+    def list(self, userid):
         data = {
             "method": "get",
             "url": 'https://qyapi.weixin.qq.com/cgi-bin/user/get',
-            "params": {"access_token": self.token,'userid': userid},
+            "params": {"access_token": self.token, 'userid': userid},
             "json": {
-                     }
-                }
+            }
+        }
         return self.send(data)
 
     def update(self, userid, user_name):
@@ -44,18 +93,9 @@ class Tongxun(BaseApi):
             "method": "get",
             "url": 'https://qyapi.weixin.qq.com/cgi-bin/user/delete',
             "params": {"access_token": self.token, 'userid': userid},
-            "json": {
-            }
+            "json": {}
         }
         return self.send(data)
-
-    def find_userid_exist(self, user_id):
-        # 查询元素id是否存在，如果不存在，报错
-        for user in self.list().json()["userid"]:
-            if user_id in user["userid"]:
-                return user["userid"]
-        print("userid not in user")
-        return ""
 
     def delete_and_detect_user(self, user_ids):
         deleted_user_ids = []
@@ -64,10 +104,27 @@ class Tongxun(BaseApi):
             # 如果用户不存在，就添加一个用户，将它的 userid存储进来
             for userid in user_ids:
                 if not self.find_userid_exist(userid):
-                    user_id_tmp = self.add(userid="hechenxin", name="zy", mobilephone="1345280872", department=1)
+                    user_id_tmp = self.add(userid="hechenxin", name="zy", mobile="13452808772", department=[1])
                     deleted_user_ids.append(user_id_tmp)
                     # 如果标签存在，就将它存入标签组
                 else:
                     deleted_user_ids.append(userid)
+
+        elif r.json()["errcode"] == 301005:
+            # 当用户id为本人时，不允许删除
+            print("不允许删除创建者")
         r = self.delete(deleted_user_ids)
         return r
+
+    def find_userid_exist(self, user_id):
+        # 查询用户id是否存在，如果不存在，报错
+        user = self.list(user_id).json()["errmsg"]
+        if 'userid not found' == user:
+            return ""
+
+    def get_partyid(self, par_id=None):
+        # par_id 为空时，获取所有部门信息
+        data = {"method": "post",
+                "url": "https://qyapi.weixin.qq.com/cgi-bin/department/list",
+                "params": {"access_token": self.token, "id": par_id}}
+        return self.send(data)
