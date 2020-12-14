@@ -1,9 +1,6 @@
 import datetime
 import json
-import random
-
 import pytest
-import requests
 from jsonpath import jsonpath
 
 from address_list.tongxun import Tongxun, PhoneNOGenerator
@@ -48,10 +45,10 @@ class TestTongxun:
         assert "".join(a) == user_name
 
     def test_list_user(self):
-        userid = "liumengqing"
+        userid = "liumq"
         r = self.user.list(userid=userid)
         assert r.status_code == 200
-        assert r.json()["userid"] == "liumengqing"
+        assert r.json()["userid"] == "liumq"
 
     # 如果 60111 ，invalid userid
     # 0. 添加 user
@@ -65,7 +62,7 @@ class TestTongxun:
         self.user.delete(["liumengqing"])
 
     def test_delete_and_detect_user(self):
-        r = self.user.delete_and_detect_user(["hechenxin"])
+        r = self.user.delete_and_detect_user(["liumengqing"])
         print(json.dumps(r.json(), indent=2))
 
     def test_department(self):
