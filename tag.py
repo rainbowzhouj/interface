@@ -41,7 +41,7 @@ class Tag(BaseApi):
 
     def list(self):
         data = {
-            "method": "get",
+            "method": "post",
             "url": 'https://qyapi.weixin.qq.com/cgi-bin/externalcontact/get_corp_tag_list',
             "params": {"access_token": self.token},
             "json": {'tag_id': []}}

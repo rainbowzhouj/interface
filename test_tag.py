@@ -1,6 +1,7 @@
 import datetime
 
 import pytest
+import yaml
 from jsonpath import jsonpath
 
 from tag import Tag
@@ -17,8 +18,10 @@ class TestTag:
 
     def test_tag_add(self):
         # todo ：测试数据要放到数据文件中
+        # j=yaml.safe_load(open{"./tag_name.yml"})
         group_name = "UI"
         tag_name = [{"name": "web"}, {"name": "app"}, {"name": "H5"}]
+
         r = self.tag.add(group_name=group_name, tag_name=tag_name)
         assert r.status_code == 200
         assert r.json()["errcode"] == 0
