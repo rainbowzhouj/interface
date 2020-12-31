@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -17,8 +19,11 @@ class MainPage:
     def goto_addmember(self):
         # click addmember
 
-        self.driver.find_element(By.CSS_SELECTOR, ".index_service_cnt_itemWrap:nth-child(1)").click()
+        # self.driver.find_element(By.CSS_SELECTOR, ".index_service_cnt_itemWrap:nth-child(1)").click()
 
-        # 点击联系人，再点击 addmember
-        # self.driver.find_element_by_id('menu_contacts').click()
+        # 点击联系人，
+        self.driver.find_element_by_id('menu_contacts').click()
+        sleep(2)
+        # 再点击 addmember
+        self.driver.find_element_by_css_selector('.js_has_member>div:nth-child(1)>a:nth-child(2)').click()
         return AddMemberPage(self.driver)

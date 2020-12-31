@@ -6,9 +6,9 @@ class TestAddMember:
         self.main = MainPage()
 
     def test_addmember(self):
-        username = '不要暴露页面细节'
-        id = 'page_addttomethod'
-        phone = '13452802242'
+        username = '相同方法的不同返回分别封装'
+        id = 'return_addto'
+        phone = '13452802262'
         addmember = self.main.goto_addmember()
         addmember.addmember(username, id, phone)
         assert username in addmember.get_member(username)
