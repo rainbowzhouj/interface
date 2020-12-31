@@ -21,5 +21,5 @@ class LoginPage:
 
     # 进入到注册页面
     def goto_register(self):
-        self.driver.find_element(By.CSS_SELECTOR, "")
+        self.driver.find_element(By.CSS_SELECTOR, ".login_registerBar_link").click()
         return RegisterPage(self.driver)

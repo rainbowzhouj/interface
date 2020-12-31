@@ -5,7 +5,7 @@ class RegisterPage:
     def __init__(self, driver: WebDriver):
         self.driver = driver
 
-    def register_success(self):
+    def register(self):
         self.driver.find_element_by_id('corp_name').send_keys('remote')
         self.driver.find_element_by_id('manager_name').send_keys('cookies')
         self.driver.find_element_by_id('register_tel').send_keys('13652825642')
