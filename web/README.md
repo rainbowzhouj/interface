@@ -50,3 +50,7 @@ selenium python 网址： https://seleniumhq.github.io/selenium/docs/api/py/ 6
 2、用例第一次实例化MainPage()的时候，会创建一个driver 当完成页面切换的时候，会传递driver， 实现driver 复用
 3、base_url 配置想要打开的页面
 4、find 方法也可以封装在base_page.py 基类里
+
+隐式等待不能判断元素的状态，可点击或可操作
+
+当点击后，可能未跳转页面
