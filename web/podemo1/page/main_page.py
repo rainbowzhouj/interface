@@ -5,15 +5,16 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
 from web.podemo1.page.add_member_page import AddMemberPage
+from web.podemo1.page.base_page import BasePage
 
 
-class MainPage:
-    def __init__(self):
-        options = Options()
-        options.debugger_address = '127.0.0.1:9222'
-        self.driver = webdriver.Chrome(options=options)
-        self.driver.get("https://work.weixin.qq.com/wework_admin/frame#index")
-        self.driver.implicitly_wait(3)
+class MainPage(BasePage):
+    # def __init__(self):
+    #     options = Options()
+    #     options.debugger_address = '127.0.0.1:9222'
+    #     self.driver = webdriver.Chrome(options=options)
+    #     self.driver.get("https://work.weixin.qq.com/wework_admin/frame#index")
+    #     self.driver.implicitly_wait(3)
 
     # 添加成员
     def goto_addmember(self):

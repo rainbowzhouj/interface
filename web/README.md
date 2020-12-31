@@ -44,3 +44,9 @@ selenium python 网址： https://seleniumhq.github.io/selenium/docs/api/py/ 6
 不要将断言与方法放在一起
 返回结果可以封装到下个页面
 同一方法有不同结果分别进行封装
+
+#### base_page.py封装基类
+1、解决driver传递和复用的问题
+2、用例第一次实例化MainPage()的时候，会创建一个driver 当完成页面切换的时候，会传递driver， 实现driver 复用
+3、base_url 配置想要打开的页面
+4、find 方法也可以封装在base_page.py 基类里
