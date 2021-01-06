@@ -6,9 +6,9 @@ class TestWX:
         self.main = MainPage()
 
     def test_addmember(self):
-        username = '封装成功'
-        id = 'read'
-        phone = '13452802292'
+        username = 'zzsuccess'
+        id = 'readsuccess10'
+        phone = '13452812182'
         addmember = self.main.goto_addmember()
         addmember.addmember(username, id, phone)
         assert username in addmember.get_member(username)

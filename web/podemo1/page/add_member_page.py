@@ -19,7 +19,7 @@ class AddMemberPage(BasePage):
         # sleep(2)
         checkbox = (By.CSS_SELECTOR, ".ww_checkbox")
         self.wait_for_click(checkbox)
-        return True
+        return self
 
     def get_member(self, value):
         # 验证联系人添加成功
@@ -36,9 +36,8 @@ class AddMemberPage(BasePage):
             titlelist = [element.get_attribute("title") for element in contactlist]
             print(titlelist)
             if value in titlelist:
-                return True
-            total_list = total_list + titlelist
-
+                total_list = total_list + titlelist
+                return total_list
             result: str = self.find(By.CSS_SELECTOR, ".ww_pageNav_info_text").text
             num, total = result.split('/', 1)
 
