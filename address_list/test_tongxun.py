@@ -45,10 +45,10 @@ class TestTongxun:
         assert "".join(a) == user_name
 
     def test_list_user(self):
-        userid = "liumq"
+        userid = "liumengqing"
         r = self.user.list(userid=userid)
         assert r.status_code == 200
-        assert r.json()["userid"] == "liumq"
+        assert r.json()["userid"] == "liumengqing"
 
     # 如果 60111 ，invalid userid
     # 0. 添加 user

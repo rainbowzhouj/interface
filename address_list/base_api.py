@@ -8,8 +8,8 @@ class BaseApi:
         self.token = self.get_token()
 
     def get_token(self):
-        corpid = 'ww342c4e9a1d9b5638'
-        corpsecret = '7Q-q_njf_xxbMeBxaUsgbJsfThF-wvl60b6d9ohRWBo'
+        corpid = 'ww183cb9f7c3775672'
+        corpsecret = 'kVWYmmKb08B2gMiz_z5yx5mZGu3WGMbCjOxU6zhmmNI'
         data = {
             "method": "get",
             "url": 'https://qyapi.weixin.qq.com/cgi-bin/gettoken',
